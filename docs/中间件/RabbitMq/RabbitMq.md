@@ -236,12 +236,12 @@ public class MqSend{
 @Service
 public class MqReceiver{
     //接收消息
-	@RabbitListener(queues = "queue_direct01")
+	@RabbitListener(queues = "queue_topic01")
     public void receive(Object msg){
         //处理逻辑
         ...
     }
-	@RabbitListener(queues = "queue_direct02")
+	@RabbitListener(queues = "queue_topic02")
     public void receive(Object msg){
         //处理逻辑
         ...

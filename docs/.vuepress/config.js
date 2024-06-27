@@ -42,7 +42,7 @@ module.exports = {
           initialOpenGroupIndex: 1,
         },{
           title: "RabbitMq",
-          children: ["/中间件/RabbitMq.md"],
+          children: ["/中间件/RabbitMq/RabbitMq.md"],
           initialOpenGroupIndex: 1,
         },], 
         // 
