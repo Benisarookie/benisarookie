@@ -334,7 +334,104 @@ public class CompletableFutureExample3 {
         });
 
         // 等待所有任务完成
-        future.join();
+        fujoin();
+    }
+}
+```
+
+## 线程轮换输出字符串
+
+```java
+/**
+*Thread 实现字符串轮训打印
+**/
+public class MultiThreadPrint extends Thread{
+    static int index;
+    static int maxCount;
+    static AtomicInteger count; 
+    static ReentrantLock lock = new ReentrantLock(true); //公平锁（线程依次执行）
+    private int assign;  //控制指定线程运行  
+    private Runnable action;
+
+    public MultiThreadPrint(int assign,Runnable action){
+        this.assign =assign;
+        if (assign == index){
+            this.assign = 0;
+        }
+        this.action = action; //初始化线程方法
+    }
+    @Override
+    public void run(){
+        while (count.get()<= maxCount){
+            lock.lock();//上锁
+            if (count.get() <= maxCount && count.get() % index == assign){
+//                System.out.println(getName());
+                this.action.run();
+                count.incrementAndGet();  //原子操作保证数据一致性
+            }
+            lock.unlock();//解锁
+        }
+    }
+
+    public static void main(String[] args) {
+        MultiThreadPrint.index = 5; //5个线程交替打印
+//        MultiThreadPrint.index = 2;
+//        MultiThreadPrint.maxCount = 25;//每个线程打印25/5次
+        MultiThreadPrint.maxCount = 100;//每个线程打印25/5次
+        MultiThreadPrint.count = new AtomicInteger(1);
+
+        //循环开两个线程
+        for (int i = 1 ;i<=index;i++){
+            final int assign = i;
+            //初始化线程方法
+            MultiThreadPrint t = new MultiThreadPrint(assign,()->{
+                System.out.println(currentThread().getName()+":"+(char) ('A'+assign-1));
+            });
+            t.setName("线程"+i);
+            t.start();
+        }
+
+    }
+}
+```
+
+```java
+/**
+*ExecutorService   轮换输出打印字符串
+**/
+public class BaseThreadForthTest13 {
+    //公平锁
+    static ReentrantLock lock = new ReentrantLock(true);
+//    static ReentrantLock lock = new ReentrantLock();
+    //线程数
+    private static int threadNum = 5;
+    //最大打印总次数
+    static int maxCount = 100;
+    //打印总数
+    static AtomicInteger count = new AtomicInteger(1);//初始化数据  （原子性操作）
+    private int assign;
+
+    public static void main(String[] args) {
+
+        //创建线程数为threadNum的线程池
+        ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
+        for (int i = 0; i < threadNum; i++) {
+            final int a =i;
+            executorService.submit(()->{
+                while (true){
+                    if (count.get()>maxCount)break;
+                    lock.lock();
+                    try {
+                        if (count.get()>maxCount)break;
+                        System.out.println(Thread.currentThread().getName()+":"+(char)('A'+ a));
+                        count.incrementAndGet();
+                    }finally {
+                        lock.unlock();
+                    }
+                }
+            });
+        }
+        executorService.shutdown();
     }
 }
 ```

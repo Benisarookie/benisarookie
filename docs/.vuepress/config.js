@@ -33,16 +33,20 @@ module.exports = {
           children: ["/idea快捷键/idea快捷键.md"],
           initialOpenGroupIndex: 1,
         },{
-          title: "JAVA",
-          children: ["/JAVA基础/init.md"],
-          initialOpenGroupIndex: 1,
-        },{
           title: "面试",
           children: ["/面试/面试.md"],
           initialOpenGroupIndex: 1,
         },{
+          title: "JAVA",
+          children: ["/JAVA基础/init.md"],
+          initialOpenGroupIndex: 1,
+        },{
           title: "RabbitMq",
           children: ["/中间件/RabbitMq/RabbitMq.md"],
+          initialOpenGroupIndex: 1,
+        },{
+          title: "JVM",
+          children: ["/JVM/JVM.md"],
           initialOpenGroupIndex: 1,
         },], 
         // 
