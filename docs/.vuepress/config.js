@@ -48,6 +48,10 @@ module.exports = {
           title: "JVM",
           children: ["/JVM/JVM.md"],
           initialOpenGroupIndex: 1,
+        },{
+          title: "Mybatis/MP",
+          children: ["/中间件/Mybatis/Mybatis.md"],
+          initialOpenGroupIndex: 1,
         },], 
         // 
       },
